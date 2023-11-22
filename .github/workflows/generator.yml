@@ -87,7 +87,7 @@ jobs:
         run: |
           git tag ${P} -m "${P}-deps.tar.xz ${P}-vendor.tar.xz"
           cd "input/${WORKDIR}"
-          GOMODCACHE="${PWD}"/go-mod go work sync
+          GOMODCACHE="${PWD}"/go-mod go work sync -modcacherw
           tar --create --auto-compress --file /tmp/${P}-deps.tar.xz go-mod
           rm -rf go-mod
 
