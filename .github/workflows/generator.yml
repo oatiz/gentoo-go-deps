@@ -137,6 +137,14 @@ jobs:
             /tmp/${{ inputs.P }}-vendor.tar.xz
           tag_name: ${{ inputs.P }}
 
+      - name: upload goland(go-work) deps to release artifaces
+        if: inputs.LANG == 'golang(go-work)'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            /tmp/${{ inputs.P }}-deps.tar.xz
+          tag_name: ${{ inputs.P }}
+
       - name: upload javascript deps to release artifaces
         if: inputs.LANG == 'javascript'
         uses: softprops/action-gh-release@v1
