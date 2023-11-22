@@ -12,6 +12,7 @@ on:
         description: "generate golang(go-mod/vendor) or javascript(node_modules) deps"
         options:
         - golang
+        - golang(go-work)
         - javascript
         - javascript(pnpm)
 
@@ -77,6 +78,18 @@ jobs:
           rm -rf go-mod
           go mod vendor
           tar --create --auto-compress --file /tmp/${P}-vendor.tar.xz vendor
+
+      - name: Generate golang(go-work) deps
+        if: inputs.LANG == 'golang(go-work)'
+        env:
+          P: ${{ inputs.P }}
+          WORKDIR: ${{ inputs.WORKDIR }}
+        run: |
+          git tag ${P} -m "${P}-deps.tar.xz ${P}-vendor.tar.xz"
+          cd "input/${WORKDIR}"
+          GOMODCACHE="${PWD}"/go-mod go work sync
+          tar --create --auto-compress --file /tmp/${P}-deps.tar.xz go-mod
+          rm -rf go-mod
 
       - name: Generate javascript node_modules
         if: inputs.LANG == 'javascript'
